@@ -17,12 +17,17 @@ def load_model_and_processor():
     )
     return model, processor
 
-def generate_description(model, processor, image_url):
+def generate_description(model, processor, image_path):
+    from PIL import Image
+    
+    # Load and process the image
+    image = Image.open(image_path).convert('RGB')
+    
     messages = [
         {
             "role": "user",
             "content": [
-                {"type": "image", "url": image_url},
+                {"type": "image", "image": image},
                 {"type": "text", "text": "Please describe the image explicitly."},
             ],
         }
@@ -49,11 +54,11 @@ def main():
     # Load model and processor
     model, processor = load_model_and_processor()
     
-    # Example image URL
-    image_url = "http://images.cocodataset.org/val2017/000000039769.jpg"
+    # Local image path
+    image_path = "./test_images/1.jpg"
     
     # Generate description
-    description = generate_description(model, processor, image_url)
+    description = generate_description(model, processor, image_path)
     print("Generated description:")
     print(description)
 
